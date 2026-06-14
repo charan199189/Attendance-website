@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Overall Attendance</title>
+
+<style>
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Arial;}
+::-webkit-scrollbar{display:none;}
+body{scrollbar-width:none;-ms-overflow-style:none;}
+
+body{
+background:linear-gradient(135deg,#e9d8fd,#ddd6fe,#c7d2fe);
+min-height:100vh;
+padding-top:120px;
+padding-bottom:40px; /* bottom space */
+}
+
+/* BANNER */
+.banner{
+position:fixed;
+top:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:center;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+animation:slideDown .7s ease;
+z-index:1000;
+}
+
+.banner img{
+width:100%;
+max-height:110px;
+object-fit:contain;
+}
+
+/* CONTAINER */
+.container{
+width:92%;
+max-width:720px;
+margin:auto;
+}
+
+/* TOP BOX */
+.topBox{
+background:rgba(255,255,255,0.75);
+backdrop-filter:blur(14px);
+border-radius:22px;
+padding:16px;
+box-shadow:0 12px 30px rgba(0,0,0,0.15);
+margin-bottom:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+/* DATE TEXT */
+.dateText{
+font-weight:600;
+color:#4c1d95;
+}
+
+/* BACK BUTTON */
+.backBtn{
+background:linear-gradient(45deg,#ff7a18,#ff3d3d);
+color:white;
+border:none;
+padding:6px 12px;
+border-radius:12px;
+cursor:pointer;
+}
+
+/* TABLE */
+.tableBox{
+background:white;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+/* HEADER */
+thead{
+background:linear-gradient(45deg,#6366f1,#7c3aed);
+color:white;
+}
+
+/* CELLS */
+th,td{
+padding:12px;
+border:1px solid #e5e7eb;
+}
+
+/* ALIGN */
+td:nth-child(2){
+text-align:left;
+}
+
+/* LOW % */
+.lowPercent{
+color:#dc2626;
+font-weight:600;
+}
+
+/* 🏆 TOP 3 STYLES */
+.gold{
+background:linear-gradient(45deg,#FFD700,#FFF8DC);
+animation:glowGold 1.5s infinite alternate;
+}
+
+.silver{
+background:linear-gradient(45deg,#C0C0C0,#F5F5F5);
+animation:glowSilver 1.5s infinite alternate;
+}
+
+.bronze{
+background:linear-gradient(45deg,#CD7F32,#FFE4C4);
+animation:glowBronze 1.5s infinite alternate;
+}
+
+/* GLOW ANIMATION */
+@keyframes glowGold{
+from{box-shadow:0 0 10px rgba(255,215,0,0.4);}
+to{box-shadow:0 0 20px rgba(255,215,0,0.8);}
+}
+
+@keyframes glowSilver{
+from{box-shadow:0 0 10px rgba(192,192,192,0.4);}
+to{box-shadow:0 0 20px rgba(192,192,192,0.8);}
+}
+
+@keyframes glowBronze{
+from{box-shadow:0 0 10px rgba(205,127,50,0.4);}
+to{box-shadow:0 0 20px rgba(205,127,50,0.8);}
+}
+
+/* HOVER EFFECT */
+tr:hover{
+transform:translateY(-2px);
+transition:.2s;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="banner">
+<img src="banner.png">
+</div>
+
+<div class="container">
+
+<div class="topBox">
+<div class="dateText" id="dateDisplay"></div>
+<button class="backBtn" onclick="goBack()">←</button>
+</div>
+
+<div class="tableBox">
+<table>
+
+<thead>
+<tr>
+<th>#</th>
+<th>Student Name</th>
+<th>%</th>
+</tr>
+</thead>
+
+<tbody id="tableBody"></tbody>
+
+</table>
+</div>
+
+</div>
+
+<script src="SD.js"></script>
+<script src="sem1-cse(c).js"></script>
+<script src="sem2-cse(c).js"></script>
+
+<script>
+
+let sem = localStorage.getItem("semester")
+
+let uptoDate = sem=="1" ? uptoDate_sem1 : uptoDate_sem2
+
+document.getElementById("dateDisplay").innerText =
+"Up to Date: " + uptoDate
+
+let dataObj = sem=="1" ? attendanceSem1 : attendanceSem2
+
+let arr=[]
+
+for(let reg in dataObj){
+
+let data=dataObj[reg]
+let tc=0,ta=0
+
+for(let m in data){
+if(data[m].total && data[m].attended){
+tc+=data[m].total
+ta+=data[m].attended
+}
+}
+
+let per = tc ? ((ta/tc)*100).toFixed(1) : 0
+
+arr.push({
+name: students[reg]?.name || reg,
+percent: parseFloat(per)
+})
+}
+
+/* SORT */
+arr.sort((a,b)=>b.percent-a.percent)
+
+/* RENDER */
+let html=""
+
+arr.forEach((s,i)=>{
+
+let medalClass=""
+let medalIcon=""
+
+if(i==0){
+medalClass="gold"
+medalIcon="🥇"
+}
+else if(i==1){
+medalClass="silver"
+medalIcon="🥈"
+}
+else if(i==2){
+medalClass="bronze"
+medalIcon="🥉"
+}
+
+html+=`
+<tr class="${medalClass}">
+<td>${medalIcon || i+1}</td>
+<td>${s.name}</td>
+<td class="${s.percent<75?'lowPercent':''}">
+${s.percent}%
+</td>
+</tr>`
+})
+
+document.getElementById("tableBody").innerHTML=html
+
+function goBack(){
+window.history.back()
+}
+
+</script>
+
+</body>
+</html>

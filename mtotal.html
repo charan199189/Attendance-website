@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Overall Marks</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI",Arial;
+}
+
+::-webkit-scrollbar{
+display:none;
+}
+
+body{
+scrollbar-width:none;
+-ms-overflow-style:none;
+background:linear-gradient(135deg,#e9d8fd,#ddd6fe,#c7d2fe);
+min-height:100vh;
+padding-top:120px;
+padding-bottom:30px;
+}
+
+/* ================= BANNER ================= */
+
+.banner{
+position:fixed;
+top:0;
+width:100%;
+background:white;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+z-index:1000;
+overflow:hidden;
+animation:slideDown .7s ease;
+}
+
+.banner img{
+width:100%;
+max-height:110px;
+object-fit:contain;
+animation:bannerZoom 4s ease-in-out infinite alternate;
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes slideDown{
+
+from{
+transform:translateY(-100%);
+opacity:0;
+}
+
+to{
+transform:translateY(0);
+opacity:1;
+}
+
+}
+
+@keyframes bannerZoom{
+
+0%{
+transform:scale(1);
+}
+
+100%{
+transform:scale(1.03);
+}
+
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+width:92%;
+max-width:720px;
+margin:auto;
+}
+
+/* ================= TOP BOX ================= */
+
+.topBox{
+background:rgba(255,255,255,0.75);
+backdrop-filter:blur(14px);
+border-radius:22px;
+padding:16px;
+box-shadow:0 12px 30px rgba(0,0,0,0.15);
+margin-bottom:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+animation:fade .5s ease;
+}
+
+.dateText{
+font-weight:700;
+color:#4c1d95;
+font-size:18px;
+}
+
+/* ================= BACK BUTTON ================= */
+
+.backBtn{
+background:linear-gradient(45deg,#ff7a18,#ff3d3d);
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:12px;
+cursor:pointer;
+transition:.25s;
+box-shadow:0 4px 12px rgba(255,60,60,0.3);
+}
+
+.backBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(255,60,60,0.5);
+}
+
+.backBtn:active{
+transform:scale(.92);
+}
+
+/* ================= TABLE ================= */
+
+.tableBox{
+background:white;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+animation:fade .5s ea    se;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+thead{
+background:linear-gradient(45deg,#6366f1,#7c3aed);
+color:white;
+}
+
+th,td{
+padding:12px;
+text-align:center;
+border-bottom:1px solid #eee;
+}
+
+td:nth-child(2){
+text-align:left;
+}
+
+/* ================= TOP RANKS ================= */
+
+.gold{
+background:linear-gradient(45deg,#FFD700,#FFF8DC);
+}
+
+.silver{
+background:linear-gradient(45deg,#C0C0C0,#F5F5F5);
+}
+
+.bronze{
+background:linear-gradient(45deg,#CD7F32,#FFE4C4);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= BANNER ================= -->
+
+<div class="banner">
+
+<img src="banner.png">
+
+</div>
+
+<!-- ================= CONTAINER ================= -->
+
+<div class="container">
+
+<div class="topBox">
+
+<div class="dateText">
+
+Overall Class Marks
+
+</div>
+
+<button class="backBtn"
+onclick="window.history.back()">
+
+←
+
+</button>
+
+</div>
+
+<div class="tableBox">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Student Name</th>
+
+<th>Total</th>
+
+<th>%</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tableBody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ================= FILES ================= -->
+
+<script src="SD.js"></script>
+
+<script src="mid1sem1.js"></script>
+<script src="mid2sem1.js"></script>
+
+<script src="mid1sem2.js"></script>
+<script src="mid2sem2.js"></script>
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+/* ================= SEMESTER ================= */
+
+let sem=localStorage.getItem("semester")
+
+let mid1Data={}
+let mid2Data={}
+
+/* ================= LOAD DATA ================= */
+
+if(sem=="1"){
+
+if(typeof mid1sem1!=="undefined"){
+mid1Data=mid1sem1
+}
+
+if(typeof mid2sem1!=="undefined"){
+mid2Data=mid2sem1
+}
+
+}
+
+else if(sem=="2"){
+
+if(typeof mid1sem2!=="undefined"){
+mid1Data=mid1sem2
+}
+
+if(typeof mid2sem2!=="undefined"){
+mid2Data=mid2sem2
+}
+
+}
+
+/* ================= TITLE ================= */
+
+let title="Overall Class Marks"
+
+/* ================= ARRAY ================= */
+
+let arr=[]
+
+/* ================================================= */
+/* ================= MID MARKS ===================== */
+/* ================================================= */
+
+if(
+Object.keys(mid1Data).length>0 &&
+Object.keys(mid2Data).length>0
+){
+
+title=`Overall Class Mid Marks`
+
+for(let reg in mid1Data){
+
+if(!mid2Data[reg]) continue
+
+let total=0
+let max=0
+
+mid1Data[reg].subjects.forEach((sub,index)=>{
+
+let m1=sub.obtained
+
+let m2=mid2Data[reg]
+.subjects[index].obtained
+
+/* ===== BEST 80% + LOWEST 20% ===== */
+
+let best=Math.max(m1,m2)
+
+let low=Math.min(m1,m2)
+
+let finalMarks=Math.round(
+(best*0.8)+(low*0.2)
+)
+
+total+=finalMarks
+
+max+=sub.max
+
+})
+
+let percent=((total/max)*100).toFixed(1)
+
+arr.push({
+
+name:students[reg]?.name || reg,
+total,
+percent
+
+})
+
+}
+
+}
+
+/* ================================================= */
+/* ================= MID 2 ONLY ==================== */
+/* ================================================= */
+
+else if(Object.keys(mid2Data).length>0){
+
+title=`Overall Class Mid-2 Marks`
+
+for(let reg in mid2Data){
+
+let total=0
+let max=0
+
+mid2Data[reg].subjects.forEach(sub=>{
+
+total+=sub.obtained
+max+=sub.max
+
+})
+
+let percent=((total/max)*100).toFixed(1)
+
+arr.push({
+
+name:students[reg]?.name || reg,
+total,
+percent
+
+})
+
+}
+
+}
+
+/* ================================================= */
+/* ================= MID 1 ONLY ==================== */
+/* ================================================= */
+
+else if(Object.keys(mid1Data).length>0){
+
+title=`Overall Class Mid-1 Marks`
+
+for(let reg in mid1Data){
+
+let total=0
+let max=0
+
+mid1Data[reg].subjects.forEach(sub=>{
+
+total+=sub.obtained
+max+=sub.max
+
+})
+
+let percent=((total/max)*100).toFixed(1)
+
+arr.push({
+
+name:students[reg]?.name || reg,
+total,
+percent
+
+})
+
+}
+
+}
+
+/* ================= TITLE UPDATE ================= */
+
+document.querySelector(".dateText")
+.innerText=title
+
+/* ================= SORT ================= */
+
+arr.sort((a,b)=>b.total-a.total)
+
+/* ================= RENDER ================= */
+
+let html=""
+
+arr.forEach((s,i)=>{
+
+let cls=""
+let medal=""
+
+if(i==0){
+
+cls="gold"
+medal="🥇"
+
+}
+
+else if(i==1){
+
+cls="silver"
+medal="🥈"
+
+}
+
+else if(i==2){
+
+cls="bronze"
+medal="🥉"
+
+}
+
+html+=`
+
+<tr class="${cls}">
+
+<td>${medal || i+1}</td>
+
+<td>${s.name}</td>
+
+<td>${s.total}</td>
+
+<td>${s.percent}%</td>
+
+</tr>
+
+`
+
+})
+
+document.getElementById("tableBody")
+.innerHTML=html
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BCME Material</title>
+
+<style>
+
+/* ================= RESET ================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI",Arial;
+}
+
+::-webkit-scrollbar{
+display:none;
+}
+
+body{
+scrollbar-width:none;
+-ms-overflow-style:none;
+background:linear-gradient(135deg,#e9d8fd,#ddd6fe,#c7d2fe);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding-top:120px;
+padding-bottom:30px;
+overflow:hidden;
+}
+
+button{
+outline:none;
+-webkit-tap-highlight-color:transparent;
+}
+
+/* ================= BANNER ================= */
+
+.banner{
+position:fixed;
+top:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:center;
+align-items:center;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+animation:bannerDrop .8s ease;
+z-index:1000;
+overflow:hidden;
+}
+
+.banner img{
+width:100%;
+max-height:110px;
+object-fit:contain;
+animation:bannerZoom 4s ease-in-out infinite alternate;
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes bannerDrop{
+from{
+transform:translateY(-100%);
+opacity:0;
+}
+to{
+transform:translateY(0);
+opacity:1;
+}
+}
+
+@keyframes bannerZoom{
+0%{
+transform:scale(1);
+}
+100%{
+transform:scale(1.03);
+}
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@keyframes glow{
+from{
+box-shadow:0 0 10px rgba(124,58,237,0.3);
+}
+to{
+box-shadow:0 0 22px rgba(124,58,237,0.7);
+}
+}
+
+@keyframes lineGlow{
+from{
+width:40px;
+opacity:.5;
+}
+to{
+width:70px;
+opacity:1;
+}
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+width:92%;
+max-width:430px;
+background:rgba(255,255,255,0.78);
+backdrop-filter:blur(14px);
+padding:30px 24px;
+border-radius:28px;
+box-shadow:0 12px 30px rgba(0,0,0,0.15);
+text-align:center;
+animation:fadeUp .7s ease;
+}
+
+/* ================= TITLE ================= */
+
+.title{
+font-size:28px;
+font-weight:700;
+color:#4c1d95;
+margin-bottom:35px;
+position:relative;
+}
+
+.title:after{
+content:"";
+width:70px;
+height:3px;
+background:linear-gradient(45deg,#7c3aed,#6366f1);
+position:absolute;
+left:50%;
+transform:translateX(-50%);
+bottom:-12px;
+border-radius:20px;
+animation:lineGlow 1.2s infinite alternate;
+}
+
+/* ================= SUBJECT BUTTONS ================= */
+
+.subjectBtn{
+width:100%;
+padding:18px;
+border:none;
+border-radius:22px;
+margin:14px 0;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+color:white;
+background:linear-gradient(45deg,#6366f1,#7c3aed);
+box-shadow:0 6px 18px rgba(99,102,241,0.35);
+animation:glow 1.5s infinite alternate;
+}
+
+.subjectBtn:hover{
+transform:translateY(-3px) scale(1.02);
+}
+
+.subjectBtn:active{
+transform:scale(.96);
+}
+
+/* ================= BACK BUTTON ================= */
+
+.backBtn{
+margin-top:20px;
+background:linear-gradient(45deg,#ff7a18,#ff3d3d);
+color:white;
+border:none;
+padding:12px 20px;
+border-radius:16px;
+cursor:pointer;
+font-weight:600;
+transition:.25s;
+box-shadow:0 4px 12px rgba(255,60,60,0.3);
+}
+
+.backBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(255,60,60,0.45);
+}
+
+.backBtn:active{
+transform:scale(.94);
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:500px){
+
+.container{
+padding:24px 18px;
+}
+
+.title{
+font-size:24px;
+}
+
+.subjectBtn{
+font-size:17px;
+padding:16px;
+}
+
+.banner img{
+max-height:100px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= BANNER ================= -->
+
+<div class="banner">
+<img src="banner.png">
+</div>
+
+<!-- ================= CONTAINER ================= -->
+
+<div class="container">
+
+<div class="title">
+🏗 BCME Material
+</div>
+
+<button class="subjectBtn"
+onclick="openSubject('Civil')">
+Civil
+</button>
+
+<button class="subjectBtn"
+onclick="openSubject('Mechanical')">
+Mechanical
+</button>
+
+<button class="backBtn"
+onclick="goBack()">
+← Back
+</button>
+
+</div>
+
+<script>
+
+function openSubject(subject){
+
+localStorage.setItem("subject",subject);
+
+window.location.href="subject.html";
+
+}
+
+function goBack(){
+
+window.location.href="material.html";
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Marks Portal</title>
+
+<style>
+
+/* ================= RESET ================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI",Arial;
+}
+
+::-webkit-scrollbar{
+display:none;
+}
+
+body{
+scrollbar-width:none;
+-ms-overflow-style:none;
+background:linear-gradient(135deg,#e9d8fd,#ddd6fe,#c7d2fe);
+min-height:100vh;
+padding-top:120px;
+padding-bottom:20px;
+}
+
+input,button{
+outline:none;
+-webkit-tap-highlight-color:transparent;
+}
+
+/* ================= BANNER ================= */
+
+.banner{
+position:fixed;
+top:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:center;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+animation:slideDown .7s ease;
+z-index:1000;
+overflow:hidden;
+}
+
+.banner img{
+width:100%;
+max-height:110px;
+object-fit:contain;
+animation:bannerZoom 4s ease-in-out infinite alternate;
+}
+
+@keyframes slideDown{
+
+from{
+transform:translateY(-100%);
+opacity:0;
+}
+
+to{
+transform:translateY(0);
+opacity:1;
+}
+
+}
+
+@keyframes bannerZoom{
+
+0%{
+transform:scale(1);
+}
+
+100%{
+transform:scale(1.03);
+}
+
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+width:92%;
+max-width:720px;
+margin:auto;
+}
+
+/* ================= TOP BOX ================= */
+
+.topBox{
+background:rgba(255,255,255,0.75);
+backdrop-filter:blur(14px);
+border-radius:22px;
+padding:18px;
+box-shadow:0 12px 30px rgba(0,0,0,0.15);
+margin-bottom:20px;
+animation:fade .5s ease;
+}
+
+/* ================= TOP INFO ================= */
+
+.topInfo{
+display:flex;
+justify-content:space-between;
+align-items:center;
+color:#4c1d95;
+font-weight:600;
+}
+
+/* ================= BACK BUTTON ================= */
+
+.backBtn{
+background:linear-gradient(45deg,#ff7a18,#ff3d3d);
+color:white;
+border:none;
+padding:6px 12px;
+border-radius:12px;
+cursor:pointer;
+transition:.25s;
+box-shadow:0 4px 12px rgba(255,60,60,0.3);
+}
+
+.backBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(255,60,60,0.5);
+}
+
+.backBtn:active{
+transform:scale(.92);
+}
+
+/* ================= SEARCH ================= */
+
+.searchBox{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:12px;
+align-items:center;
+}
+
+.searchBox input{
+flex:1 1 250px;
+min-width:0;
+padding:12px;
+border-radius:22px;
+border:1px solid #ddd;
+transition:.25s;
+}
+
+.searchBox input:focus{
+border-color:#7c3aed;
+box-shadow:0 0 12px rgba(124,58,237,0.4);
+transform:scale(1.02);
+}
+
+/* ================= BUTTONS ================= */
+
+.cancelBtn,.searchBtn{
+flex:1 1 120px;
+min-width:120px;
+border:none;
+border-radius:22px;
+padding:10px;
+cursor:pointer;
+transition:.25s;
+font-weight:500;
+white-space:nowrap;
+text-align:center;
+}
+
+/* CANCEL */
+
+.cancelBtn{
+background:#e5e7eb;
+color:#333;
+}
+
+.cancelBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 16px rgba(0,0,0,0.2);
+}
+
+/* SEARCH */
+
+.searchBtn{
+background:linear-gradient(45deg,#7c3aed,#6366f1);
+color:white;
+box-shadow:0 6px 18px rgba(99,102,241,0.3);
+animation:glowBtn 1.5s infinite alternate;
+}
+
+.searchBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(99,102,241,0.5);
+}
+
+.searchBtn:active{
+transform:scale(.92);
+}
+
+@keyframes glowBtn{
+
+from{
+box-shadow:0 0 10px rgba(124,58,237,0.3);
+}
+
+to{
+box-shadow:0 0 20px rgba(124,58,237,0.7);
+}
+
+}
+
+/* ================= TITLES ================= */
+
+.sectionTitle{
+text-align:center;
+font-size:18px;
+font-weight:700;
+color:#4c1d95;
+margin:20px 0;
+position:relative;
+}
+
+.sectionTitle:before,
+.sectionTitle:after{
+
+content:"";
+width:50px;
+height:2px;
+background:#7c3aed;
+position:absolute;
+top:50%;
+
+}
+
+.sectionTitle:before{
+left:0;
+}
+
+.sectionTitle:after{
+right:0;
+}
+
+/* ================= CARD ================= */
+
+.card{
+background:white;
+padding:14px;
+border-radius:16px;
+box-shadow:0 6px 18px rgba(0,0,0,.1);
+line-height:2;
+animation:fade .5s ease;
+}
+
+/* ================= TABLE ================= */
+
+.tableBox{
+background:white;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+animation:fade .5s ease;
+margin-top:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+thead{
+background:linear-gradient(45deg,#6366f1,#7c3aed);
+color:white;
+}
+
+th,td{
+padding:10px;
+text-align:center;
+border-bottom:1px solid #eee;
+}
+
+.totalRow{
+background:#f3f4f6;
+font-weight:700;
+}
+
+/* ================= OR SECTION ================= */
+
+.orSection{
+display:flex;
+align-items:center;
+gap:10px;
+margin:12px 0;
+color:#6b7280;
+font-weight:600;
+}
+
+.orLine{
+flex:1;
+height:1px;
+background:#d1d5db;
+}
+
+/* ================= TOTAL BUTTON ================= */
+
+.totalBtn{
+width:100%;
+padding:12px;
+border:none;
+border-radius:22px;
+background:linear-gradient(45deg,#0ea5e9,#6366f1);
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+box-shadow:0 6px 18px rgba(99,102,241,0.3);
+}
+
+.totalBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(99,102,241,0.5);
+}
+
+/* ================= ERROR ================= */
+
+.errorBox{
+padding:14px;
+border-radius:12px;
+background:#fee2e2;
+color:#991b1b;
+text-align:center;
+}
+
+/* ================= FADE ================= */
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="banner">
+
+<img src="banner.png">
+
+</div>
+
+<div class="container">
+
+<div class="topBox">
+
+<div class="topInfo">
+
+<div id="classInfo"></div>
+
+<button class="backBtn"
+onclick="window.location.href='select.html'">
+
+←
+
+</button>
+
+</div>
+
+<div class="searchBox">
+
+<input type="text"
+id="regno"
+placeholder="Enter Regd Number">
+
+<button class="cancelBtn"
+onclick="resetSearch()">
+
+Cancel
+
+</button>
+
+<button class="searchBtn"
+onclick="searchStudent()">
+
+Search
+
+</button>
+
+</div>
+
+<div id="overallSection">
+
+<div class="orSection">
+
+<div class="orLine"></div>
+
+<span>OR</span>
+
+<div class="orLine"></div>
+
+</div>
+
+<button class="totalBtn"
+onclick="window.location.href='mtotal.html'">
+
+View Overall Class Marks
+
+</button>
+
+</div>
+
+</div>
+
+<div id="studentCard"></div>
+
+<div id="marksCard"></div>
+
+</div>
+
+<!-- ================= FILES ================= -->
+
+<script src="SD.js"></script>
+
+<script src="mid1sem1.js"></script>
+<script src="mid2sem1.js"></script>
+
+<script src="mid1sem2.js"></script>
+<script src="mid2sem2.js"></script>
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+/* ================= LOCAL DATA ================= */
+
+let course=localStorage.getItem("course")
+
+let year=localStorage.getItem("year")
+
+let sem=localStorage.getItem("semester")
+
+let branch=localStorage.getItem("branch")
+
+let section=localStorage.getItem("section")
+
+const roman=[
+"",
+"I",
+"II",
+"III",
+"IV",
+"V",
+"VI",
+"VII",
+"VIII"
+]
+
+let yearText=[
+"",
+"1st Year",
+"2nd Year",
+"3rd Year",
+"4th Year"
+]
+
+document.getElementById("classInfo").innerText=
+
+course+" | "+
+yearText[year]+" / "+
+roman[sem]+" Sem | "+
+branch+"- "+section
+
+/* ================= SEARCH ================= */
+
+function searchStudent(){
+
+document.getElementById("overallSection")
+.style.display="none"
+
+let reg=document.getElementById("regno")
+.value.trim().toUpperCase()
+
+let student=students[reg]
+
+document.getElementById("studentCard")
+.innerHTML=""
+
+document.getElementById("marksCard")
+.innerHTML=""
+
+if(!student){
+
+document.getElementById("studentCard")
+.innerHTML=`
+
+<div class="sectionTitle">
+
+Student Details
+
+</div>
+
+<div class="card">
+
+<div class="errorBox">
+
+No student record found.
+Please enter valid registration number.
+
+</div>
+
+</div>
+`
+
+return
+
+}
+
+/* ================= DETAILS ================= */
+
+document.getElementById("studentCard")
+.innerHTML=`
+
+<div class="sectionTitle">
+
+Student Details
+
+</div>
+
+<div class="card">
+
+<b>Name:</b> ${student.name}<br>
+
+<b>Regd.No:</b> ${reg}<br>
+
+<b>Course:</b> ${student.course}<br>
+
+<b>Year/Sem:</b>
+${student.year} /
+${student.semester} Sem<br>
+
+<b>Branch-Section:</b>
+${student.branch}-${student.section}
+
+</div>
+`
+
+loadMarks(reg)
+
+}
+
+/* ================= LOAD MARKS ================= */
+
+function loadMarks(reg){
+
+let mid1Data=null
+let mid2Data=null
+
+/* ===== SEM 1 ===== */
+
+if(sem=="1"){
+
+if(typeof mid1sem1!=="undefined"){
+mid1Data=mid1sem1[reg]
+}
+
+if(typeof mid2sem1!=="undefined"){
+mid2Data=mid2sem1[reg]
+}
+
+}
+
+/* ===== SEM 2 ===== */
+
+else if(sem=="2"){
+
+if(typeof mid1sem2!=="undefined"){
+mid1Data=mid1sem2[reg]
+}
+
+if(typeof mid2sem2!=="undefined"){
+mid2Data=mid2sem2[reg]
+}
+
+}
+
+let html=""
+
+/* ================================================= */
+/* ================= MID 1 TABLE =================== */
+/* ================================================= */
+
+if(mid1Data){
+
+let rows=""
+let total=0
+let max=0
+let count=1
+
+mid1Data.subjects.forEach(sub=>{
+
+rows+=`
+
+<tr>
+
+<td>${count}</td>
+
+<td>${sub.name}</td>
+
+<td>${sub.max}</td>
+
+<td>${sub.obtained}</td>
+
+</tr>
+
+`
+
+count++
+
+total+=sub.obtained
+max+=sub.max
+
+})
+
+html+=`
+
+<div class="sectionTitle">
+
+Mid 1 - Sem ${sem}
+
+</div>
+
+<div class="tableBox">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Subjects</th>
+
+<th>Marks</th>
+
+<th>Obtained Marks</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${rows}
+
+<tr class="totalRow">
+
+<td colspan="2">
+
+Total
+
+</td>
+
+<td>${max}</td>
+
+<td>${total}</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+`
+
+}
+
+/* ================================================= */
+/* ================= MID 2 TABLE =================== */
+/* ================================================= */
+
+if(mid2Data){
+
+let rows=""
+let total=0
+let max=0
+let count=1
+
+mid2Data.subjects.forEach(sub=>{
+
+rows+=`
+
+<tr>
+
+<td>${count}</td>
+
+<td>${sub.name}</td>
+
+<td>${sub.max}</td>
+
+<td>${sub.obtained}</td>
+
+</tr>
+
+`
+
+count++
+
+total+=sub.obtained
+max+=sub.max
+
+})
+
+html+=`
+
+<div class="sectionTitle">
+
+Mid 2 - Sem ${sem}
+
+</div>
+
+<div class="tableBox">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Subjects</th>
+
+<th>Marks</th>
+
+<th>Obtained Marks</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${rows}
+
+<tr class="totalRow">
+
+<td colspan="2">
+
+Total
+
+</td>
+
+<td>${max}</td>
+
+<td>${total}</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+`
+
+}
+
+/* ================================================= */
+/* ============== FINAL MID MARKS ================== */
+/* ================================================= */
+
+if(mid1Data && mid2Data){
+
+let rows=""
+let total=0
+let max=0
+let count=1
+
+mid1Data.subjects.forEach((sub,index)=>{
+
+let m1=sub.obtained
+
+let m2=mid2Data.subjects[index].obtained
+
+/* ===== BEST 80% + LOWEST 20% ===== */
+
+let best=Math.max(m1,m2)
+
+let low=Math.min(m1,m2)
+
+let finalMarks=((best*0.8)+(low*0.2)).toFixed(1)
+
+/* ROUND OFF */
+
+finalMarks=Math.round(finalMarks)
+
+rows+=`
+
+<tr>
+
+<td>${count}</td>
+
+<td>${sub.name}</td>
+
+<td>${sub.max}</td>
+
+<td>${finalMarks}</td>
+
+</tr>
+
+`
+
+count++
+
+total+=finalMarks
+
+max+=sub.max
+
+})
+
+html+=`
+
+<div class="sectionTitle">
+
+Mid Marks - Sem ${sem}
+
+</div>
+
+<div class="tableBox">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Subjects</th>
+
+<th>Marks</th>
+
+<th>Obtained Marks</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${rows}
+
+<tr class="totalRow">
+
+<td colspan="2">
+
+Total
+
+</td>
+
+<td>${max}</td>
+
+<td>${total}</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+`
+
+}
+
+/* ================= NO DATA ================= */
+
+if(html===""){
+
+html=`
+
+<div class="card">
+
+<div class="errorBox">
+
+Marks data not available
+for this student.
+
+</div>
+
+</div>
+
+`
+
+}
+
+document.getElementById("marksCard")
+.innerHTML=html
+
+}
+
+/* ================= RESET ================= */
+
+function resetSearch(){
+
+location.reload()
+
+}
+
+/* ================= ENTER KEY ================= */
+
+document.getElementById("regno")
+.addEventListener("keypress",e=>{
+
+if(e.key==="Enter"){
+
+searchStudent()
+
+}
+
+})
+
+</script>
+
+</body>
+</html>

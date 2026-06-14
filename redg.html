@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Attendance Portal</title>
+
+<style>
+
+/* ================= RESET ================= */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI",Arial;
+}
+
+::-webkit-scrollbar{display:none;}
+body{scrollbar-width:none;-ms-overflow-style:none;}
+
+input,button{
+outline:none;
+-webkit-tap-highlight-color:transparent;
+}
+
+/* ================= BODY ================= */
+body{
+background:linear-gradient(135deg,#e9d8fd,#ddd6fe,#c7d2fe);
+min-height:100vh;
+padding-top:120px;
+padding-bottom:10px; /* more bottom space */
+}
+
+/* ================= BANNER ================= */
+.banner{
+position:fixed;
+top:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:center;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+animation:slideDown .7s ease;
+z-index:1000;
+}
+
+.banner a{
+display:block;
+width:100%;
+}
+
+.banner img{
+width:100%;
+max-height:110px;
+object-fit:contain;
+cursor:pointer;
+transition:.3s;
+}
+
+.banner img:hover{
+transform:scale(1.02);
+}
+
+/* ANIMATION */
+@keyframes slideDown{
+from{transform:translateY(-100%);opacity:0}
+to{transform:translateY(0);opacity:1}
+}
+
+/* ================= CONTAINER ================= */
+.container{
+width:92%;
+max-width:720px;
+margin:auto;
+}
+
+/* ================= TOP BOX ================= */
+.topBox{
+background:rgba(255,255,255,0.75);
+backdrop-filter:blur(14px);
+border-radius:22px;
+padding:18px;
+box-shadow:0 12px 30px rgba(0,0,0,0.15);
+margin-bottom:20px;
+animation:fade .5s ease;
+}
+
+/* ================= TOP ================= */
+.topInfo{
+display:flex;
+justify-content:space-between;
+align-items:center;
+color:#4c1d95;
+font-weight:600;
+}
+
+/* ================= BACK BUTTON ================= */
+.backBtn{
+background:linear-gradient(45deg,#ff7a18,#ff3d3d);
+color:white;
+border:none;
+padding:6px 12px;
+border-radius:12px;
+cursor:pointer;
+transition:.25s;
+box-shadow:0 4px 12px rgba(255,60,60,0.3);
+}
+
+.backBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(255,60,60,0.5);
+}
+
+.backBtn:active{
+transform:scale(.92);
+}
+
+/* ================= SEARCH ================= */
+.searchBox{
+display:flex;
+flex-wrap:wrap;             
+gap:10px;
+margin-top:12px;
+align-items:center;
+}
+
+/* INPUT */
+.searchBox input{
+flex:1 1 250px;             
+min-width:0;
+padding:12px;
+border-radius:22px;
+border:1px solid #ddd;
+transition:.25s;
+}
+
+/* INPUT FOCUS ANIMATION */
+.searchBox input:focus{
+border-color:#7c3aed;
+box-shadow:0 0 12px rgba(124,58,237,0.4);
+transform:scale(1.02);
+}
+
+/* ================= BUTTONS ================= */
+.cancelBtn,.searchBtn{
+flex:1 1 120px;              
+min-width:120px;
+border:none;
+border-radius:22px;
+padding:10px;
+cursor:pointer;
+transition:.25s;
+font-weight:500;
+white-space:nowrap;
+text-align:center;
+}
+
+/* CANCEL */
+.cancelBtn{
+background:#e5e7eb;
+color:#333;
+}
+
+.cancelBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 16px rgba(0,0,0,0.2);
+}
+
+/* SEARCH */
+.searchBtn{
+background:linear-gradient(45deg,#7c3aed,#6366f1);
+color:white;
+box-shadow:0 6px 18px rgba(99,102,241,0.3);
+animation:glowBtn 1.5s infinite alternate;
+}
+
+.searchBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(99,102,241,0.5);
+}
+
+.searchBtn:active{
+transform:scale(.92);
+}
+
+/* GLOW */
+@keyframes glowBtn{
+from{box-shadow:0 0 10px rgba(124,58,237,0.3);}
+to{box-shadow:0 0 20px rgba(124,58,237,0.7);}
+}
+
+/* ================= TITLE ================= */
+.sectionTitle{
+text-align:center;
+font-size:18px;
+font-weight:700;
+color:#4c1d95;
+margin:20px 0;
+position:relative;
+}
+
+.sectionTitle:before,.sectionTitle:after{
+content:"";
+width:50px;height:2px;
+background:#7c3aed;
+position:absolute;top:50%;
+}
+
+.sectionTitle:before{left:0;}
+.sectionTitle:after{right:0;}
+
+/* ================= CARD ================= */
+.card{
+background:white;
+padding:14px;
+border-radius:16px;
+box-shadow:0 6px 18px rgba(0,0,0,.1);
+line-height:2;
+animation:fade .5s ease;
+}
+
+/* ================= TABLE ================= */
+.tableBox{
+background:white;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+animation:fade .5s ease;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+thead{
+background:linear-gradient(45deg,#6366f1,#7c3aed);
+color:white;
+}
+
+th,td{
+padding:10px;
+text-align:center;
+border-bottom:1px solid #eee;
+}
+
+/* COLORS */
+.lowPercent{color:#dc2626;font-weight:600;}
+.totalRow{background:#f3f4f6;font-weight:600;}
+
+/* ================= MESSAGE ================= */
+.message{
+margin-top:12px;
+padding:14px;
+border-radius:14px;
+font-size:14px;
+line-height:1.6;
+animation:fade .5s ease;
+}
+
+.low{background:#fee2e2;color:#991b1b}
+.medium{background:#ffedd5;color:#9a3412}
+.good{background:#ecfeff;color:#155e75}
+.excellent{background:#ecfdf5;color:#065f46}
+
+/* ================= ERROR ================= */
+.errorBox{
+padding:14px;
+border-radius:12px;
+background:#fee2e2;
+color:#991b1b;
+text-align:center;
+}
+
+/* ================= OR SECTION ================= */
+.orSection{
+display:flex;
+align-items:center;
+gap:10px;
+margin:12px 0;
+color:#6b7280;
+font-weight:600;
+}
+
+.orLine{
+flex:1;
+height:1px;
+background:#d1d5db;
+}
+
+/* ================= TOTAL BUTTON ================= */
+.totalBtn{
+width:100%;
+padding:12px;
+border:none;
+border-radius:22px;
+background:linear-gradient(45deg,#0ea5e9,#6366f1);
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+box-shadow:0 6px 18px rgba(99,102,241,0.3);
+}
+
+.totalBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(99,102,241,0.5);
+}
+
+/* ================= BUTTON ROW ================= */
+.btnRow{
+display:flex;
+gap:10px;
+width:100%;
+}
+
+.btnRow button{
+flex:1;    
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fade{
+from{opacity:0;transform:translateY(20px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="banner">
+<a href="https://www.mictech.edu.in" target="_blank">
+<img src="banner.png">
+</a>
+</div>
+
+<div class="container">
+
+<div class="topBox">
+
+<div class="topInfo">
+<div id="classInfo"></div>
+<button class="backBtn" onclick="goBack()">←</button>
+</div>
+
+<div class="searchBox">
+<input type="text" id="regno" placeholder="Enter Regd Number">
+<button class="cancelBtn" onclick="resetSearch()">Cancel</button>
+<button class="searchBtn" onclick="searchStudent()">Search</button>
+</div>
+
+<div id="overallSection">
+    <div class="orSection">
+    <div class="orLine"></div>
+    <span>OR</span>
+    <div class="orLine"></div>
+</div>
+
+<button class="totalBtn" onclick="goToTotal()">
+View Overall Class Attendance    
+</button>
+</div>
+
+</div>
+
+<div id="studentCard"></div>
+<div id="attendanceCard"></div>
+
+</div>
+
+<script src="SD.js"></script>
+<script src="sem1-cse(c).js"></script>
+<script src="sem2-cse(c).js"></script>
+
+<script>
+
+/* ================= LOCAL DATA ================= */
+let course=localStorage.getItem("course")
+let year=localStorage.getItem("year")
+let sem=localStorage.getItem("semester")
+let branch=localStorage.getItem("branch")
+let section=localStorage.getItem("section")
+
+const roman=["","I","II","III","IV","V","VI","VII","VIII"]
+let yearText=["","1st Year","2nd Year","3rd Year","4th Year"]
+
+document.getElementById("classInfo").innerText=
+course+" | "+yearText[year]+" / "+roman[sem]+" Sem | "+branch+"- "+section
+
+/* ================= SEARCH ================= */
+function searchStudent(){
+
+document.getElementById("overallSection").style.display="none"
+
+let reg=document.getElementById("regno").value.trim().toUpperCase()
+let student=students[reg]
+
+document.getElementById("studentCard").innerHTML=""
+document.getElementById("attendanceCard").innerHTML=""
+
+/* NOT FOUND */
+if(!student){
+document.getElementById("studentCard").innerHTML=`
+<div class="sectionTitle">Student Details</div>
+<div class="card">
+<div class="errorBox">
+No student record found. Please enter a valid registration number.
+</div>
+</div>`
+return
+}
+
+/* DETAINED */
+if(student.status==="detained"){
+document.getElementById("studentCard").innerHTML=`
+<div class="sectionTitle">Student Details</div>
+<div class="card">
+<b>Name:</b> ${student.name}<br>
+<b>Regd.No:</b> ${reg}<br><br>
+<div class="errorBox">
+The student has been officially detained due to academic regulations.
+</div>
+</div>`
+return
+}
+
+/* NORMAL */
+document.getElementById("studentCard").innerHTML=`
+<div class="sectionTitle">Student Details</div>
+<div class="card">
+<b>Name:</b> ${student.name}<br>
+<b>Regd.No:</b> ${reg}<br>
+<b>Course:</b> ${student.course}<br>
+<b>Year/Sem:</b> ${student.year} / ${student.semester} Sem<br>
+<b>Branch-Section:</b> ${student.branch}-${student.section}
+</div>`
+
+loadAttendance(reg)
+}
+
+/* ================= ATTENDANCE ================= */
+function loadAttendance(reg){
+
+let regKey = reg.trim().toUpperCase()
+let data = (sem == "1" ? attendanceSem1 : attendanceSem2)[regKey]
+
+if(!data){
+document.getElementById("attendanceCard").innerHTML=
+`<div class="errorBox">Attendance data not provided for this class.</div>`
+return
+}
+
+let body="",tc=0,ta=0,i=1
+
+for(let m in data){
+let t=data[m].total ?? "-"
+let a=data[m].attended ?? "-"
+let p="-"
+
+if(t!=="-" && a!=="-"){
+p=((a/t)*100).toFixed(1)
+tc+=t
+ta+=a
+}
+
+let cls=(p!=="-" && p<75)?"lowPercent":""
+
+body+=`<tr>
+<td>${i}</td>
+<td>${m}</td>
+<td>${t}</td>
+<td>${a}</td>
+<td class="${cls}">${p==="-"?"-":p+"%"}</td>
+</tr>`
+
+i++
+}
+
+let per=tc?((ta/tc)*100).toFixed(1):0
+
+document.getElementById("attendanceCard").innerHTML=`
+<div class="sectionTitle">Attendance - Sem ${sem}</div>
+
+<div class="tableBox">
+<table>
+
+<thead>
+<tr>
+<th>#</th>
+<th>Month</th>
+<th>Classes</th>
+<th>Attended</th>
+<th>%</th>
+</tr>
+</thead>
+
+<tbody>${body}</tbody>
+
+<tfoot>
+<tr class="totalRow">
+<td colspan="2">Total</td>
+<td>${tc}</td>
+<td>${ta}</td>
+<td class="${per<75?'lowPercent':''}">${per}%</td>
+</tr>
+</tfoot>
+
+</table>
+</div>
+
+<div class="message ${per<=50?'low':per<=75?'medium':per<=90?'good':'excellent'}">
+<b>*NOTE:</b><br>
+
+${sem=="1" ?
+
+`📌 November and December attendance data is currently unavailable.
+The records will be updated once the official data is received.
+Students are advised to revisit later for complete attendance details.
+We appreciate your patience and cooperation.`
+
+:
+
+(per<=50?
+`🔴 Your attendance is critically below the required standard.
+You are at risk of academic detention.
+Immediate improvement is mandatory.
+Ensure regular attendance in all classes.`:
+
+per<=75?
+`🟠 Your attendance is below the required threshold.
+You may face eligibility issues for examinations.
+Improvement is still possible with consistency.
+Attend classes regularly without fail.`:
+
+per<=90?
+`🔵 Your attendance is at a satisfactory level.
+You are currently within the safe range.
+Maintain consistency in attendance.
+Avoid unnecessary absences.`:
+
+`🟢 Your attendance record is excellent.
+This reflects strong discipline and commitment.
+You are performing at an ideal level.
+Continue maintaining this consistency.`)
+}
+
+</div>
+`
+}
+
+/* ================= NAV ================= */
+function goBack(){
+localStorage.setItem("fromBack","true")
+window.location.href="select.html"
+}
+
+function resetSearch(){
+location.reload()
+}
+
+/* ENTER KEY */
+document.getElementById("regno").addEventListener("keypress",e=>{
+if(e.key==="Enter") searchStudent()
+})
+
+
+document.getElementById("regno").value=""
+
+document.getElementById("studentCard").innerHTML=""
+document.getElementById("attendanceCard").innerHTML=""
+
+document.getElementById("overallSection").style.display="block"
+
+
+function goToTotal(){
+window.location.href="total.html" 
+}   
+
+
+</script>
+
+</body>
+</html>

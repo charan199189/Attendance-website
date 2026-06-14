@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Files</title>
+
+<style>
+
+/* ================= RESET ================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI",Arial;
+}
+
+::-webkit-scrollbar{
+display:none;
+}
+
+body{
+scrollbar-width:none;
+-ms-overflow-style:none;
+background:linear-gradient(135deg,#e9d8fd,#ddd6fe,#c7d2fe);
+min-height:100vh;
+padding-top:120px;
+padding-left:0;
+padding-right:0;
+padding-bottom:50px;
+overflow-y:auto;
+}
+
+/* ================= BANNER ================= */
+
+.banner{
+position:fixed;
+top:0;
+width:100%;
+background:white;
+box-shadow:0 4px 12px rgba(0,0,0,.15);
+z-index:1000;
+overflow:hidden;
+animation:bannerDrop .8s ease;
+}
+
+.banner img{
+width:100%;
+max-height:110px;
+object-fit:contain;
+animation:bannerZoom 4s ease-in-out infinite alternate;
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+width:92%;
+max-width:700px;
+margin:auto;
+padding-bottom:40px;
+animation:fadeUp .7s ease;
+}
+
+/* ================= TOP BOX ================= */
+
+.topBox{
+background:rgba(255,255,255,.85);
+backdrop-filter:blur(14px);
+padding:18px;
+border-radius:22px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:22px;
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+animation:fadeUp .6s ease;
+}
+
+.title{
+font-size:22px;
+font-weight:700;
+color:#4c1d95;
+line-height:1.4;
+}
+
+/* ================= BACK BUTTON ================= */
+
+.backBtn{
+background:linear-gradient(45deg,#ff7a18,#ff3d3d);
+border:none;
+padding:10px 16px;
+border-radius:12px;
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+box-shadow:0 4px 12px rgba(255,60,60,.25);
+}
+
+.backBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(255,60,60,.35);
+}
+
+/* ================= FILE CARD ================= */
+
+.fileCard{
+background:white;
+padding:18px;
+border-radius:18px;
+margin-bottom:12px;
+box-shadow:0 6px 18px rgba(0,0,0,.1);
+transition:.3s;
+animation:fadeUp .5s ease;
+}
+
+.fileCard:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.fileLink{
+text-decoration:none;
+color:#4c1d95;
+font-size:17px;
+font-weight:600;
+display:block;
+}
+
+/* ================= EMPTY ================= */
+
+.empty{
+background:white;
+padding:25px;
+border-radius:20px;
+text-align:center;
+color:#6b7280;
+font-weight:600;
+font-size:16px;
+box-shadow:0 6px 18px rgba(0,0,0,.1);
+animation:fadeUp .6s ease;
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes bannerDrop{
+from{
+transform:translateY(-100%);
+opacity:0;
+}
+to{
+transform:translateY(0);
+opacity:1;
+}
+}
+
+@keyframes bannerZoom{
+0%{
+transform:scale(1);
+}
+100%{
+transform:scale(1.03);
+}
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(25px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:500px){
+
+.title{
+font-size:18px;
+}
+
+.topBox{
+padding:15px;
+}
+
+.fileLink{
+font-size:16px;
+}
+
+.backBtn{
+padding:8px 14px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="banner">
+<img src="banner.png">
+</div>
+
+<div class="container">
+
+<div class="topBox">
+
+<div class="title" id="pageTitle">
+Files
+</div>
+
+<button class="backBtn"
+onclick="history.back()">
+
+← Back
+
+</button>
+
+</div>
+
+<div id="fileList"></div>
+
+</div>
+
+<script>
+
+/* ================= DATA ================= */
+
+let subject =
+localStorage.getItem("subject")
+
+let category =
+localStorage.getItem("category")
+
+document.getElementById("pageTitle").innerText =
+subject + " - " + category
+
+/* ================= FILE DATABASE ================= */
+
+const files = {
+
+DEVC:{
+
+pdfs:[
+],
+
+papers:[ {
+name:"MID-2 QUESTION PAPER",
+path:"docs/DEVC/papers/DEVC TUTORIAL SHEET-1(MID-2).pdf"
+  },
+
+{
+name:"MID-2 Tutorial sheet solutions",
+path:"docs/DEVC/papers/MID-2 Tutorial sheet solutions.pdf"
+  },
+
+  {
+name:"DE&VC MODEL PAPER-1",
+path:"docs/DEVC/papers/DE&VC MODEL PAPER-1.pdf"
+  },
+
+  {
+name:"DE&VC MODEL PAPER-2",
+path:"docs/DEVC/papers/DE&VC MODEL PAPER-2.pdf"
+  }
+
+
+],
+
+extra:[
+
+]
+
+},
+
+Chemistry:{
+pdfs:[],
+papers:[],
+extra:[]
+},
+
+DS:{
+pdfs:[],
+papers:[],
+extra:[]
+},
+
+BEEE:{
+pdfs:[
+{
+name:"BEEE-UNIT-1",
+path:"docs/BEEE/pdfs/BEEE-UNIT-1.pdf"
+},
+{
+name:"BEEE-UNIT-2",
+path:"docs/BEEE/pdfs/BEEE-UNIT-2.pdf"
+},
+{
+name:"BEEE-UNIT-3",
+path:"docs/BEEE/pdfs/BEEE-UNIT-3.pdf"
+},
+{
+name:"BEEE-UNIT-4",
+path:"docs/BEEE/pdfs/BEEE-UNIT-4.pdf"
+},
+{
+name:"BEEE-UNIT-5",
+path:"docs/BEEE/pdfs/BEEE-UNIT-5.pdf"
+},
+{
+name:"BEEE-UNIT-6",
+path:"docs/BEEE/pdfs/BEEE-UNIT-6.pdf"
+},
+{
+name:"BEEE-UNIT-6-DIGITAL ELECTRONICS",
+path:"docs/BEEE/pdfs/BEEE-UNIT-6-DIGITAL ELECTRONICS.pdf"
+},
+
+],
+
+papers:[
+{
+name:"BEEE-MID-1-IMP QUESTIONS",
+path:"docs/BEEE/papers/BEEE-MID-1-IMP QUESTIONS.pdf"
+},
+
+{
+name:"BEEE-MID-2-IMP QUESTIONS",
+path:"docs/BEEE/papers/BEEE-MID-2-IMP QUESTIONS.pdf"
+}
+
+],
+extra:[]
+},
+
+Civil:{
+pdfs:[
+{
+name:"prefabricated structures",  
+path:"docs/BCME/Civil/pdfs/prefabricated structures.pdf"
+},
+{
+name:"rain water harvesting",  
+path:"docs/BCME/Civil/pdfs/rain water harvesting.pdf"
+},
+{
+name:"water resources",  
+path:"docs/BCME/Civil/pdfs/water resources.pdf"
+},
+],
+papers:[
+{
+name:"BCME-UNIT I&III-QUESTION BANK",  
+path:"docs/BCME/Civil/papers/BCME-UNIT I&III-QUESTION BANK.pdf"
+},
+{
+name:"Mid-2_Question Bank",  
+path:"docs/BCME/Civil/papers/Mid-2_Question Bank.pdf"
+},
+{
+name:"Model Papers",  
+path:"docs/BCME/Civil/papers/Model Papers.pdf"
+},
+
+],
+extra:[
+{
+name:"2.Chain Surveying",  
+path:"docs/BCME/Civil/extra/2.Chain Surveying.pdf"
+},
+{
+name:"3.Compass Surveying Definitions-1",  
+path:"docs/BCME/Civil/extra/3.Compass Surveying Definitions-1.jpeg"
+},
+{
+name:"3.Compass Surveying Definitions-2",  
+path:"docs/BCME/Civil/extra/3.Compass Surveying Definitions-2.jpeg"
+},
+{
+name:"4.Levelling",  
+path:"docs/BCME/Civil/extra/4.Levelling.pdf"
+},
+{
+name:"Classification of Surveys",  
+path:"docs/BCME/Civil/extra/Classification of Surveys.jpeg"
+}
+
+]
+},
+
+Mechanical:{
+pdfs:[
+{
+name:"BME_Material Unit_I",  
+path:"docs/BCME/Mechanical/pdfs/BME_Material Unit_I.pdf"
+},
+{
+name:"BME_Material Unit_II",  
+path:"docs/BCME/Mechanical/pdfs/BME_Material Unit_II.pdf"
+},
+{
+name:"BME_Material Unit_III",  
+path:"docs/BCME/Mechanical/pdfs/BME_Material Unit_III.pdf"
+}
+],
+papers:[ 
+{
+name:"BCME-BME Questions Unitwise",  
+path:"docs/BCME/Mechanical/papers/BCME-BME Questions Unitwise.pdf"
+},
+],
+extra:[
+{
+name:"BME_Mid-1",  
+path:"docs/BCME/Mechanical/extra/BME_Mid-1.jpeg"
+}, 
+]
+}
+
+}
+
+/* ================= RENDER ================= */
+
+let html=""
+
+if(
+files[subject] &&
+files[subject][category] &&
+files[subject][category].length>0
+){
+
+files[subject][category].forEach(file=>{
+
+html += `
+
+<div class="fileCard">
+
+<a class="fileLink"
+
+href="${file.path}"
+
+target="_blank">
+
+📄 ${file.name}
+
+</a>
+
+</div>
+
+`
+
+})
+
+}
+else{
+
+html=`
+
+<div class="empty">
+
+No files uploaded yet.
+
+</div>
+
+`
+
+}
+
+document.getElementById("fileList").innerHTML=html
+
+</script>
+
+</body>
+</html>
