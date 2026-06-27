@@ -9,3 +9,4 @@ subjects:[
 {name:"BCME",max:30,obtained:20}
 ]
 },
+}
